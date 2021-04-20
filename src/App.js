@@ -1,25 +1,72 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import FEATURES from "./FEATURES";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import CustomizeLaptopList from "./components/CustomizeLaptopList/CustomizeLaptopList";
+import DisplayCart from "./components/DisplayCart/DisplayCart";
+
+// Normalizes string as a slug - a string that is safe to use
+// in both URLs and html attributes
+
+import "./App.css";
+
+// This object will allow us to
+// easily convert numbers into US dollar values
+export const USCurrencyFormat = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selected: {
+        Processor: {
+          name: "17th Generation Intel Core HB (7 Core with donut spare)",
+          cost: 700,
+        },
+        "Operating System": {
+          name: "Ubuntu Linux 16.04",
+          cost: 200,
+        },
+        "Video Card": {
+          name: "Toyota Corolla 1.5v",
+          cost: 1150.98,
+        },
+        Display: {
+          name: '15.6" UHD (3840 x 2160) 60Hz Bright Lights and Knobs',
+          cost: 1500,
+        },
+      },
+    };
+  }
+
+  updateFeature = (feature, newValue) => {
+    const selected = Object.assign({}, this.state.selected);
+    selected[feature] = newValue;
+    this.setState({
+      selected,
+    });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <header>
+          <h1>ELF Computing | Laptops</h1>
+        </header>
+        <main>
+          <CustomizeLaptopList
+            features={FEATURES}
+            updateFeature={this.updateFeature}
+            selected={this.state.selected}
+          />
+          <DisplayCart selected={this.state.selected} />
+        </main>
+      </div>
+    );
+  }
 }
 
 export default App;
